@@ -332,7 +332,7 @@ public class GoogleApiWrapper2 {
             if(nextPageToken.length()==0) {
                 result = (FileList) runApiCall(()->driveService.files().list()
                         .setSpaces("drive")
-                        .setFields("nextPageToken,files(id, name, parents,md5Checksum,mimeType)")
+                        .setFields("nextPageToken,files(id, name, parents,md5Checksum,mimeType,modifiedTime,createdTime)")
                         .setQ("'"+rootItem.getId()+"' in parents and trashed = false")
                         .execute());
             }else{
@@ -340,7 +340,7 @@ public class GoogleApiWrapper2 {
                 result = (FileList) runApiCall(()->driveService.files().list()
                         .setPageToken(npt)
                         .setSpaces("drive")
-                        .setFields("nextPageToken,files(id, name, parents,md5Checksum,mimeType)")
+                        .setFields("nextPageToken,files(id, name, parents,md5Checksum,mimeType,modifiedTime,createdTime)")
                         .setQ("'"+rootItem.getId()+"' in parents and trashed = false")
                         .execute());
             }
@@ -412,11 +412,7 @@ public class GoogleApiWrapper2 {
                 repo.addMd5(file.getId(),md5);
             }
 
-            file.getCreatedTime();
-            file.getModifiedTime();
-            file.getModifiedByMe();
-            file.getOwnedByMe();
-            file.getModifiedByMeTime();
+
 
             if(file.getMd5Checksum().equalsIgnoreCase(md5)){
                 //System.out.println("@ "+filePath);

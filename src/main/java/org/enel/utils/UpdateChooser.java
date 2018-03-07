@@ -3,11 +3,9 @@ package org.enel.utils;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.model.File;
 import com.google.common.hash.Hashing;
-import org.enel.GDException;
 import org.enel.entities.FileSync;
 import org.enel.entities.FileSyncStatus;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;

@@ -2,6 +2,7 @@ package org.enel;
 
 import com.google.api.services.drive.model.*;
 import org.enel.entities.*;
+import org.enel.utils.GDException;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.FileOutputStream;
@@ -103,7 +104,7 @@ public class GDDir {
     }
 
     public void getAllFiles(DriveItem getGooleDir, Path targetDir, boolean dryRun) throws GDException {
-        DirectoryStatus status = connection.getTokenService().getDirStatus(getGooleDir);
+        DirectoryStatus status = connection.getDb().getDirStatus(getGooleDir);
         String tokenString = null;
         //if(status.getLastUpdate()==null || status.getLastUpdate().isEmpty()){
         StartPageToken response = (StartPageToken) connection.runApiCall("014",(s)-> s.changes()
@@ -113,13 +114,13 @@ public class GDDir {
 
         connection.waitForJobsCompletion();
         status.setLastUpdate(tokenString);
-        simplyDownload(targetDir,getGooleDir,dryRun,getGooleDir,true);
-        connection.getTokenService().saveDirStatus(dryRun);
+        downloadFresh(targetDir,getGooleDir,dryRun,getGooleDir,true);
+        connection.getDb().saveDirStatus(status,dryRun);
         //}
     }
 
     public void updateAllFiles(DriveItem getGooleDir, Path targetDir, boolean dryRun) throws GDException {
-        DirectoryStatus status = connection.getTokenService().getDirStatus(getGooleDir);
+        DirectoryStatus status = connection.getDb().getDirStatus(getGooleDir);
         RootDriveItem root = getGooleDir.getRoot();
         Path driveDirPath = Paths.get(getGooleDir.getFullPath());
 
@@ -148,12 +149,19 @@ public class GDDir {
                     parent = root;
                 }
 
+
+
                 Path relativeFilePath = Paths.get(parent.getFullPath(), file.getName());
+                final Path currentDirPath = Paths.get(targetDir.toString(),parent.getFullPath(getGooleDir));
+                if(parent.isIgnore()){
+                    ignore.writeIgnore(currentDirPath);
+                    continue;
+                }
                 if (!relativeFilePath.startsWith(driveDirPath)) {
                     continue;
                 }
                 if (!dryRun) {
-                    final Path currentDirPath = Paths.get(targetDir.toString(),parent.getFullPath(getGooleDir));
+
                     connection.doRun(new GoogleTaskable() {
                         @Override
                         public void run() throws GDException {
@@ -166,13 +174,14 @@ public class GDDir {
 
             connection.waitForJobsCompletion();
             if (pageToken != null) {
-                connection.getTokenService().saveDirStatus(dryRun);
+                status.setLastUpdate(pageToken);
+                connection.getDb().saveDirStatus(status,dryRun);
             }
             pageToken = changes.getNextPageToken();
         }
     }
 
-    private void simplyDownload(Path targetDir, DriveItem sourceDir,boolean dryRun,DriveItem localRoot,boolean first) throws GDException {
+    private void downloadFresh(Path targetDir, DriveItem sourceDir, boolean dryRun, DriveItem localRoot, boolean first) throws GDException {
         String nextPageToken = "";
         final Path currentDirPath ;
         RootDriveItem realRoot = localRoot.getRoot();
@@ -181,6 +190,16 @@ public class GDDir {
         }else{
             currentDirPath = Paths.get(targetDir.toString(),sourceDir.getFullPath(localRoot));
         }
+        try {
+            Files.createDirectory(currentDirPath);
+        }catch(IOException ex){
+            throw new GDException("040",ex);
+        }
+        if(sourceDir.isIgnore()){
+            ignore.writeIgnore(currentDirPath);
+            return;
+        }
+
 
         while(nextPageToken!=null){
 
@@ -221,9 +240,11 @@ public class GDDir {
             nextPageToken = result.getNextPageToken();
         }
         for(DriveItem son : sourceDir.getItem()){
-            simplyDownload(targetDir,son,dryRun,localRoot,false);
+            downloadFresh(targetDir,son,dryRun,localRoot,false);
         }
     }
+
+
 
     private void doWriteFile(Path currentDirPath, File file) throws GDException {
         try {

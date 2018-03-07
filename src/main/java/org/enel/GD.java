@@ -2,6 +2,7 @@ package org.enel;
 
 import org.enel.entities.DirectoryStatus;
 import org.enel.entities.DriveItem;
+import org.enel.utils.GDException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,20 +18,14 @@ public class GD {
         this.dirManager = dirManager;
     }
 
-    public void forceDownload(String gdDir, String targetDir,boolean dryRun) throws GDException {
+    public void download(String gdDir, String targetDir,boolean dryRun,boolean force) throws GDException {
         DriveItem getGooleDir = this.dirManager.getAllDirs(gdDir);
         Path targetDirPath = Paths.get(targetDir);
 
-        DirectoryStatus status = connection.getTokenService().getDirStatus(getGooleDir);
-        status.setLastUpdate(null);
-        this.dirManager.getAllFiles(getGooleDir, targetDirPath, dryRun);
-    }
-
-    public void download(String gdDir, String targetDir,boolean dryRun) throws GDException {
-        DriveItem getGooleDir = this.dirManager.getAllDirs(gdDir);
-        Path targetDirPath = Paths.get(targetDir);
-
-        DirectoryStatus status = connection.getTokenService().getDirStatus(getGooleDir);
+        DirectoryStatus status = connection.getDb().getDirStatus(getGooleDir);
+        if(force){
+            status.setLastUpdate(null);
+        }
         if(status.getLastUpdate()==null || status.getLastUpdate().isEmpty()) {
             this.dirManager.getAllFiles(getGooleDir, targetDirPath, dryRun);
         }else{

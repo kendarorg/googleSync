@@ -270,7 +270,7 @@ public class Quickstart {
         server.start();
         Thread.sleep(1000);
 
-        return new HsqlDb("jdbc:hsqldb:hsql://localhost:"+serverPort+"/its","sa","");*/
+        return new GDDatabase("jdbc:hsqldb:hsql://localhost:"+serverPort+"/its","sa","");*/
         return new HsqlDb("jdbc:sqlite:"+dataStoreDirPath+
                 java.io.File.separator+"gs.sqlite","","");
     }

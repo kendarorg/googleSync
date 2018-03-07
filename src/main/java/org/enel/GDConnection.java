@@ -13,15 +13,16 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.common.util.concurrent.RateLimiter;
-import org.enel.entities.DriveStatus;
 import org.enel.entities.GoogleTaskable;
 import org.enel.utils.ExceptionSupplier;
+import org.enel.utils.GDException;
 import org.enel.utils.Tasker;
 import org.kendar.Quickstart;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,8 +38,7 @@ public class GDConnection {
     private final Path settingsPath;
     private final Path clientSecretPath;
     private final Path dataStoreFile;
-    private final Path tokenStoreFile;
-    private GDTokenService tokenService;
+    private final GDDatabase db;
     private RateLimiter googleSemaphore;
     private Drive service;
     private int runners = 20;
@@ -61,21 +61,33 @@ public class GDConnection {
         }
     }
 
+    public GDConnection(GDDatabase db, String applicationName) throws GDException {
+        this(db,applicationName,null);
+    }
+
     //applicationName "Drive API Java org.kendar.Quickstart";
-    public GDConnection(String applicationName, String settingsPath, GDTokenService tokenService) throws GDException {
+    public GDConnection(GDDatabase db, String applicationName, String settingsPath) throws GDException {
+        if(settingsPath==null){
+            try {
+                settingsPath = GDConnection.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            } catch (URISyntaxException e) {
+                throw new GDException("053",e);
+            }
+        }
         APPLICATION_NAME = applicationName;
+        this.db = db;
         this.settingsPath = Paths.get(settingsPath);
         this.clientSecretPath = Paths.get(settingsPath,CLIENT_SECRET);
         this.dataStoreFile = Paths.get(settingsPath,DATA_STORE_PATH);
-        this.tokenStoreFile = Paths.get(settingsPath,TOKEN_STORE);
-        this.tokenService = tokenService;
 
-        this.tokenService.initialize(tokenStoreFile);
         try {
             Files.createDirectories(this.settingsPath);
         } catch (Exception e) {
             throw new GDException("012",e);
         }
+
+        db.intialize("jdbc:sqlite:"+this.settingsPath+
+                java.io.File.separator+"gs.sqlite","","");
 
         googleSemaphore = RateLimiter.create(5);
 
@@ -156,11 +168,12 @@ public class GDConnection {
         }
     }
 
-    public GDTokenService getTokenService() {
-        return tokenService;
-    }
 
     public void doRun(GoogleTaskable taskable){
         tasksToRun.add(taskable);
+    }
+
+    public GDDatabase getDb() {
+        return db;
     }
 }

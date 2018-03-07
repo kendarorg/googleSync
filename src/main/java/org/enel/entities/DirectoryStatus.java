@@ -2,10 +2,13 @@ package org.enel.entities;
 
 import org.kendar.DriveItem;
 
+import java.util.UUID;
+
 public class DirectoryStatus {
     public DirectoryStatus(){
 
     }
+    private UUID id;
     private String directoryId;
     private String directoryPath;
     private String lastUpdate;
@@ -37,5 +40,13 @@ public class DirectoryStatus {
 
     public void setLastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

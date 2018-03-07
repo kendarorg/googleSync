@@ -1,4 +1,4 @@
-package org.enel;
+package org.enel.utils;
 
 public class GDException extends Exception {
     public GDException(String message, Throwable cause) {

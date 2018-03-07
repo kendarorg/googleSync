@@ -5,6 +5,8 @@ import org.kendar.DriveItem;
 import java.util.UUID;
 
 public class DirectoryStatus {
+    private String realPath;
+
     public DirectoryStatus(){
 
     }
@@ -48,5 +50,13 @@ public class DirectoryStatus {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public void setRealPath(String realPath) {
+        this.realPath = realPath;
+    }
+
+    public String getRealPath() {
+        return realPath;
     }
 }

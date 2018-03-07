@@ -62,26 +62,48 @@ public class GDDatabase {
         return dtf.format(now);
     }
 
-    public DirectoryStatus getDirStatus(final DriveItem item) {
+    public DirectoryStatus getDirStatus(final DriveItem item, final String realPath) {
         return doExecute((c)->{
             DirectoryStatus result =null;
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM FOLDER_STATUSES WHERE PATH='" + item.getFullPath() + "'");
+            ResultSet rs = st.executeQuery("SELECT * FROM FOLDER_STATUSES WHERE PATH='" + realPath + "'");
             for (; rs.next(); ) {
                 result = new DirectoryStatus();
                 result.setId(UUID.fromString(rs.getString("ID")));
                 result.setLastUpdate(rs.getString("TAG"));
-                result.setDirectoryPath(rs.getString("PATH"));
+                result.setDirectoryPath(item.getFullPath());
                 result.setDirectoryId(rs.getString("DIR_ID"));
+                result.setRealPath(rs.getString("PATH"));
                 return result;
                 //return rs.getString("CHECKSUM");
             }
-           return null;
+            result = new DirectoryStatus();
+            result.setDirectoryPath(item.getFullPath());
+            result.setRealPath(realPath);
+            result.setDirectoryId(item.getId());
+            return result;
         });
     }
 
     public void saveDirStatus(DirectoryStatus item,boolean dryRun) throws GDException {
         if(dryRun)return;
+        doExecute((c)->{
+            String date = now();
+            Statement st = c.createStatement();
+            if(item.getId()==null) {
+                item.setId(UUID.randomUUID());
+                st.executeUpdate("INSERT INTO FOLDER_STATUSES (ID,PATH,CREATION_DATE,LAST_UPDATE,TAG,DIR_ID) " +
+                        " VALUES ('" + item.getId()
+                        + "','" + item.getRealPath() + "','" + date + "','" + date + "','" + item.getLastUpdate() + "','" +
+                        item.getDirectoryId() + "')");
+            }else{
+                st.executeUpdate("UPDATE FOLDER_STATUSES SET" +
+                        " PATH='"+item.getRealPath()+"',LAST_UPDATE='"+date+"',TAG='"+item.getLastUpdate()+"') WHERE " +
+                        " ID='"+item.getId()+"'");
+            }
+            st.close();
+            return null;
+        });
     }
 
     private <T> T doExecute(ThrowingFunction<Connection,T> function){

@@ -3,10 +3,10 @@ package org.kendar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.*;
-import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.util.concurrent.RateLimiter;
 import org.apache.commons.lang3.StringUtils;
+import org.enel.utils.ExceptionSupplier;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

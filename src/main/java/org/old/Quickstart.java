@@ -1,4 +1,4 @@
-package org.kendar;
+package org.old;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -18,7 +18,6 @@ import com.google.api.services.drive.model.File;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
 //import org.hsqldb.server.Server;
-import org.omg.CORBA.Environment;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -27,13 +26,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Quickstart {
     /** Application name. */
     private static final String APPLICATION_NAME =
-            "Drive API Java org.kendar.Quickstart";
+            "Drive API Java org.old.Quickstart";
 
     /** Directory to store user credentials for this application. */
     private static java.io.File dataStoreDir;
@@ -270,7 +267,7 @@ public class Quickstart {
         server.start();
         Thread.sleep(1000);
 
-        return new GDDatabase("jdbc:hsqldb:hsql://localhost:"+serverPort+"/its","sa","");*/
+        return new GD2Database("jdbc:hsqldb:hsql://localhost:"+serverPort+"/its","sa","");*/
         return new HsqlDb("jdbc:sqlite:"+dataStoreDirPath+
                 java.io.File.separator+"gs.sqlite","","");
     }

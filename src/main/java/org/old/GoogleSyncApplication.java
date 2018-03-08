@@ -1,13 +1,9 @@
-package org.kendar;
+package org.old;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
-import org.testng.reporters.Files;
-
-import java.io.File;
 
 @Configuration
 @SpringBootApplication

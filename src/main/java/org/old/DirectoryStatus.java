@@ -1,4 +1,4 @@
-package org.kendar;
+package org.old;
 
 public class DirectoryStatus {
     public DirectoryStatus(){

@@ -17,9 +17,8 @@ import org.enel.entities.GoogleTaskable;
 import org.enel.utils.ExceptionSupplier;
 import org.enel.utils.GDException;
 import org.enel.utils.Tasker;
-import org.kendar.Quickstart;
+import org.old.Quickstart;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -65,7 +64,7 @@ public class GDConnection {
         this(db,applicationName,null);
     }
 
-    //applicationName "Drive API Java org.kendar.Quickstart";
+    //applicationName "Drive API Java org.old.Quickstart";
     public GDConnection(GDDatabase db, String applicationName, String settingsPath) throws GDException {
         if(settingsPath==null){
             try {

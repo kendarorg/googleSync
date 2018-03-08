@@ -30,6 +30,15 @@ public class UpdateChooser {
             status.setLocalCreated(toRFC3339(localFile.creationTime()));
             status.setGoogleCreated(toRFC3339(googleFile.getCreatedTime()));
 
+            if(googleFile.getTrashed()){
+                if (status.getGoogleModified().isAfter(status.getLocaleModified())) {
+                    status.setAction(FileSync.REMOVE_FROM_LOCAL);
+                }else{
+                    status.setAction(FileSync.UPLOAD_TO_GOOGLE);
+                }
+                return status;
+            }
+
 
             if (status.getGoogleModified().isAfter(status.getLocaleModified())) {
                 if (googleFile.getSize() != localFile.size()) {

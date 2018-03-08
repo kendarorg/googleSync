@@ -1,10 +1,12 @@
 package org.enel.entities;
 
 import java.io.File;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DriveItem {
+    private String md5;
     private String fullPath=null;
     private String id;
     private DriveItem parent;
@@ -13,6 +15,8 @@ public class DriveItem {
     private boolean isDir;
     private List<DriveItem> item = new ArrayList<>();
     private boolean ignore;
+    private Instant modifiedTime;
+    private Instant createdTime;
 
     public String getId() {
         return id;
@@ -104,5 +108,29 @@ public class DriveItem {
 
     public boolean isIgnore() {
         return ignore;
+    }
+
+    public void setCreatedTime(Instant createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public void setModifiedTime(Instant modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public Instant getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public Instant getCreatedTime() {
+        return createdTime;
+    }
+
+    public String getMd5() {
+        return md5==null?"":md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

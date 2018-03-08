@@ -1,7 +1,8 @@
 package org.enel.entities;
 
-import org.kendar.DriveItem;
+import org.old.DriveItem;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class DirectoryStatus {
@@ -14,6 +15,7 @@ public class DirectoryStatus {
     private String directoryId;
     private String directoryPath;
     private String lastUpdate;
+    private Instant lastUpdateTime;
 
     public DirectoryStatus(DriveItem rootItem) {
         directoryId = rootItem.getId();
@@ -58,5 +60,13 @@ public class DirectoryStatus {
 
     public String getRealPath() {
         return realPath;
+    }
+
+    public Instant getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(Instant lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 }

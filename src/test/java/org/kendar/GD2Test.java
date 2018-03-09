@@ -1,11 +1,6 @@
 package org.kendar;
 
-import org.kendar.GD2;
-import org.kendar.GD2StatusService;
-import org.kendar.GD2StatusServiceImpl;
 import org.testng.annotations.Test;
-
-import java.nio.file.Path;
 
 import static org.mockito.Mockito.mock;
 
@@ -32,7 +27,7 @@ public class GD2Test {
 
         String gPath = "/path";
         GD2StatusService target= new GD2StatusServiceImpl(drive,settings);
-        target.loadGoogleStatus(gPath);
+        target.loadGoogleStatus(gPath, status);
     }
 
     @Test
@@ -42,7 +37,7 @@ public class GD2Test {
 
         String lPath = "/home/test/other";
         GD2StatusService target= new GD2StatusServiceImpl(drive,settings);
-        target.loadLocalStatus(lPath);
+        target.loadLocalStatus(lPath, status);
     }
 
 
@@ -52,6 +47,6 @@ public class GD2Test {
 
         String lPath = "/home/test/other";
         GD2DriveService drive = new GD2DriveServiceImpl(settings);
-        drive.loadAllDirs();
+        drive.loadAllData();
     }
 }

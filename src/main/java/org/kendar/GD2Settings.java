@@ -20,4 +20,7 @@ public interface GD2Settings {
     JsonFactory getJsonFactory();
 
     String getDbConnectionString();
+
+    String getApplicationName();
+    Path getDataStorePath();
 }

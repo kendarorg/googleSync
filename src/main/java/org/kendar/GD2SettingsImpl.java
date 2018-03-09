@@ -21,12 +21,15 @@ public class GD2SettingsImpl implements GD2Settings {
     private final String CLIENT_SECRET = "client_secret.json";
     private final String DB_DIR = "db";
     private final String DB_FILE = "gd2.data";
+    private final String DATA_STORE_FILE= "googleSync.ds";
 
     private final Path rootPath;
+    private final Path dataStorePath;
     private final Path settingsDir;
     private final Path dbFile;
     private final GoogleClientSecrets clientSecrets;
     private final String dbConnectionString;
+    private String applicationName=null;
 
     private JsonFactory jsonFactory;
     private List<String> scopes;
@@ -37,6 +40,7 @@ public class GD2SettingsImpl implements GD2Settings {
         if(!Files.exists(settingsDir)){
             Files.createDirectory(settingsDir);
         }
+        this.dataStorePath = Paths.get(rootPath,SETTINGS_DIR,DATA_STORE_FILE);
         this.dbFile = Paths.get(rootPath,SETTINGS_DIR,DB_DIR,DB_FILE);
         if(!Files.exists(dbFile.getParent())){
             Files.createDirectory(dbFile.getParent());
@@ -84,5 +88,15 @@ public class GD2SettingsImpl implements GD2Settings {
     @Override
     public String getDbConnectionString() {
         return dbConnectionString;
+    }
+
+    @Override
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    @Override
+    public Path getDataStorePath() {
+        return dataStorePath;
     }
 }

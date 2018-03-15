@@ -2,6 +2,7 @@ package org.kendar;
 
 import org.kendar.entities.GD2DriveDelta;
 import org.kendar.entities.GD2DriveItem;
+import org.kendar.entities.GD2DriveIterator;
 import org.kendar.entities.GD2DriveStatus;
 import org.kendar.utils.GD2Exception;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -98,7 +99,15 @@ public class GD2StatusServiceImpl implements GD2StatusService {
 
     @Override
     public List<GD2DriveDelta> loadDifferences() throws GD2Exception {
-        //Find what
+        List<GD2DriveDelta> result = new ArrayList<>();
+        GD2DriveIterator iterator = googleRoot.iterator();
+
+        while(iterator.moveNext()){
+            GD2DriveItem current = iterator.getCurrent();
+        }
+
+        //First folder present on drive not present locally
+
         throw new NotImplementedException();
     }
 
@@ -109,6 +118,7 @@ public class GD2StatusServiceImpl implements GD2StatusService {
             currentStatus = new GD2DriveStatus();
             currentStatus.setGooglePath(googlePath);
             currentStatus.setId(localPath.toString());
+            db.saveDriveStatus(currentStatus);
         }
         return currentStatus;
     }

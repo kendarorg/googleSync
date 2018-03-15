@@ -1,11 +1,33 @@
 package org.kendar.entities;
 
+import com.google.j2objc.annotations.ObjectiveCName;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GD2DriveItem {
+    public GD2DriveItem(){
+
+    }
+
+    public GD2DriveIterator iterator(){
+        return new GD2DriveIterator(this);
+    }
+
+    @Override
+    public String toString(){
+        return getName();
+    }
+    public GD2DriveItem(String name,GD2DriveItem ... items){
+        this.name = name;
+        this.id = UUID.randomUUID().toString();
+        for(GD2DriveItem i :items){
+            addChild(i);
+        }
+    }
     private String id;
     private String name;
     private String parentId;

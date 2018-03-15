@@ -29,7 +29,7 @@ public class GD2 {
         this.settings = settings;
         this.connection = connection;
     }
-    public void run(String gPath, String lPath) throws GD2Exception {
+    public void simpleBackup(String gPath, String lPath) throws GD2Exception {
         Path localPath = Paths.get(lPath);
         GD2DriveStatus status = this.statusService.loadDriveStatus(gPath,localPath);
 
@@ -37,7 +37,7 @@ public class GD2 {
                 ()->this.statusService.loadLocalStatus(localPath,status),
                 ()->this.statusService.loadGoogleStatus(gPath,status));
 
-        ;
+
         this.statusService.loadDifferences();
 
 

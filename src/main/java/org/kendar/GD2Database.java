@@ -13,4 +13,6 @@ public interface GD2Database {
     void saveDriveItems(List<GD2DriveItem> itemsToInsert);
 
     GD2DriveStatus getDriveStatus(Path localPath);
+
+    void saveDriveStatus(GD2DriveStatus currentStatus);
 }

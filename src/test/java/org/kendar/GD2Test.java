@@ -14,10 +14,10 @@ public class GD2Test {
         String gPath = "/path";
         String lPath = "/home/test/other";
 
-        GD2 target = new GD2(status,drive,settings);
+        //GD2 target = new GD//2(status,drive,settings);
 
 
-        target.run(gPath,lPath);
+        //target.simpleBackup(gPath,lPath);
     }
 
     @Test
@@ -26,8 +26,8 @@ public class GD2Test {
         GD2Settings settings = mock(GD2Settings.class);
 
         String gPath = "/path";
-        GD2StatusService target= new GD2StatusServiceImpl(drive,settings);
-        target.loadGoogleStatus(gPath, status);
+        //GD2StatusService target= new GD2StatusServiceImpl(drive,settings);
+        //target.loadGoogleStatus(gPath, status);
     }
 
     @Test
@@ -36,8 +36,8 @@ public class GD2Test {
         GD2Settings settings = mock(GD2Settings.class);
 
         String lPath = "/home/test/other";
-        GD2StatusService target= new GD2StatusServiceImpl(drive,settings);
-        target.loadLocalStatus(lPath, status);
+        //GD2StatusService target= new GD2StatusServiceImpl(drive,settings);
+        //target.loadLocalStatus(lPath, status);
     }
 
 
@@ -46,7 +46,7 @@ public class GD2Test {
         GD2Settings settings = mock(GD2Settings.class);
 
         String lPath = "/home/test/other";
-        GD2DriveService drive = new GD2DriveServiceImpl(settings);
-        drive.loadAllData();
+        //GD2DriveService drive = new GD2DriveServiceImpl(settings);
+        //drive.loadAllData();
     }
 }

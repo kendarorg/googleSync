@@ -16,6 +16,20 @@ public class GD2DriveItemUtils {
         return null;
     }
 
+    public static String getPath(GD2DriveItem root,GD2DriveItem children){
+        GD2DriveItem tmp = children;
+        String result = new String();
+        while(root!=tmp && tmp!=null){
+            if(result.length()==0){
+                result = tmp.getName();
+            }else {
+                result = tmp.getName() + "/"+ result;
+            }
+            tmp = tmp.getParent();
+        }
+        return cleanGooglePath(result);
+    }
+
     public static GD2DriveItem getRoot(GD2DriveItem item){
         while(item.getParent()!=null){
             item = item.getParent();

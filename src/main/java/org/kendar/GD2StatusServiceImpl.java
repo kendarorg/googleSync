@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.kendar.entities.GD2DriveItemUtils.findByPath;
+import static org.kendar.entities.GD2DriveItemUtils.getPath;
 import static org.kendar.entities.GD2DriveItemUtils.sortDriveItems;
 import static org.kendar.utils.LocalFileUtils.loadLocalDriveItem;
 
@@ -48,7 +49,6 @@ public class GD2StatusServiceImpl implements GD2StatusService {
 
     @Override
     public void loadLocalStatus(Path lPath, GD2DriveStatus status) {
-
 
         HashMap<String, GD2DriveItem> items = new HashMap<>();
         GD2DriveItem root = new GD2DriveItem();
@@ -104,6 +104,12 @@ public class GD2StatusServiceImpl implements GD2StatusService {
 
         while(iterator.moveNext()){
             GD2DriveItem current = iterator.getCurrent();
+            String path = getPath(googleRoot,current);
+            Path localPath =
+            if(current.isDir()){
+
+            }
+
         }
 
         //First folder present on drive not present locally

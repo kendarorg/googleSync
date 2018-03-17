@@ -1,6 +1,7 @@
 package org.kendar.utils;
 
 import org.kendar.entities.GD2DriveItem;
+import org.kendar.entities.GD2Path;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,9 +10,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import static org.kendar.utils.TimeUtils.ftToInstant;
 
 public class LocalFileUtils {
-    public static GD2DriveItem loadLocalDriveItem(Path path) throws GD2Exception {
+    public static GD2DriveItem loadLocalDriveItem(GD2Path path) throws GD2Exception {
         try {
-            BasicFileAttributes localFile = Files.readAttributes(path, BasicFileAttributes.class);
+            BasicFileAttributes localFile = Files.readAttributes(path.toPath(), BasicFileAttributes.class);
             return loadLocalDriveItem(path,localFile);
         }catch(GD2Exception ex){
             throw ex;
@@ -20,12 +21,12 @@ public class LocalFileUtils {
         }
     }
 
-    public static GD2DriveItem loadLocalDriveItem(Path path,BasicFileAttributes localFile) throws GD2Exception {
+    public static GD2DriveItem loadLocalDriveItem(GD2Path path,BasicFileAttributes localFile) throws GD2Exception {
         try {
             GD2DriveItem item = new GD2DriveItem();
             item.setId(path.toString());
             item.setParentId(path.getParent().toString());
-            item.setName(path.getFileName().toString());
+            item.setName(path.getFileName());
             item.setCreatedTime(ftToInstant(localFile.creationTime()));
             item.setModifiedTime(ftToInstant(localFile.lastModifiedTime()));
             item.setDir(localFile.isDirectory());

@@ -4,6 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.DriveScopes;
+import org.kendar.utils.PathUtils;
 
 import javax.inject.Named;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class GD2SettingsImpl implements GD2Settings {
         dbConnectionString = "jdbc:sqlite:"+this.dbFile.toString();
 
         InputStream in =
-                GD2SettingsImpl.class.getResourceAsStream(java.io.File.separator+CLIENT_SECRET);
+                GD2SettingsImpl.class.getResourceAsStream(PathUtils.SEPARATOR+CLIENT_SECRET);
         clientSecrets =
                 GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
     }

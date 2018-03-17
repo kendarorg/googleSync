@@ -7,6 +7,7 @@ import org.enel.entities.DriveItem;
 import org.enel.utils.GDException;
 import org.kendar.entities.GD2DriveItem;
 import org.kendar.entities.GD2DriveStatus;
+import org.kendar.entities.GD2Path;
 import org.kendar.utils.GD2Exception;
 
 import javax.inject.Inject;
@@ -30,12 +31,13 @@ public class GD2 {
         this.connection = connection;
     }
     public void simpleBackup(String gPath, String lPath) throws GD2Exception {
-        Path localPath = Paths.get(lPath);
-        GD2DriveStatus status = this.statusService.loadDriveStatus(gPath,localPath);
+        GD2Path localPath = GD2Path.get(Paths.get(lPath));
+        GD2Path googlePath = GD2Path.get(Paths.get(gPath));
+        GD2DriveStatus status = this.statusService.loadDriveStatus(googlePath,localPath);
 
         connection.waitAll(
                 ()->this.statusService.loadLocalStatus(localPath,status),
-                ()->this.statusService.loadGoogleStatus(gPath,status));
+                ()->this.statusService.loadGoogleStatus(googlePath,status));
 
 
         this.statusService.loadDifferences();

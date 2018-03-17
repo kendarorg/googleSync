@@ -2,6 +2,7 @@ package org.kendar;
 
 import org.kendar.entities.GD2DriveItem;
 import org.kendar.entities.GD2DriveStatus;
+import org.kendar.entities.GD2Path;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
@@ -29,7 +30,7 @@ public class GD2DatabaseImpl implements GD2Database{
     }
 
     @Override
-    public GD2DriveStatus getDriveStatus(Path localPath) {
+    public GD2DriveStatus getDriveStatus(GD2Path localPath) {
         return null;
     }
 

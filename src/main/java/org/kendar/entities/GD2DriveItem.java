@@ -13,6 +13,8 @@ public class GD2DriveItem {
 
     }
 
+
+
     public GD2DriveIterator iterator(){
         return new GD2DriveIterator(this);
     }
@@ -21,24 +23,18 @@ public class GD2DriveItem {
     public String toString(){
         return getName();
     }
-    public GD2DriveItem(String name,GD2DriveItem ... items){
-        this.name = name;
-        this.id = UUID.randomUUID().toString();
-        for(GD2DriveItem i :items){
-            addChild(i);
-        }
-    }
-    private String id;
-    private String name;
-    private String parentId;
-    private GD2DriveItem parent;
+
+    String id;
+    String name;
+    String parentId;
+    GD2DriveItem parent;
     ConcurrentHashMap<String,GD2DriveItem> children = new ConcurrentHashMap<>();
-    private Instant createdTime;
-    private Instant modifiedTime;
-    private boolean dir;
-    private boolean local = false;
-    private long size =0;
-    private String md5 = "";
+    Instant createdTime;
+    Instant modifiedTime;
+    boolean dir;
+    boolean local = false;
+    long size =0;
+    String md5 = "";
 
     public List<GD2DriveItem> getChildren(){
         return new ArrayList<GD2DriveItem>(children.values());
@@ -53,6 +49,8 @@ public class GD2DriveItem {
     }
 
     public void addChild(GD2DriveItem child){
+        child.setParent(this);
+        child.setParentId(this.id);
         this.children.put(child.id,child);
     }
 

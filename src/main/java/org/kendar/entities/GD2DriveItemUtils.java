@@ -1,5 +1,11 @@
 package org.kendar.entities;
 
+import org.kendar.GD2;
+import org.kendar.utils.PathUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import static org.kendar.utils.PathUtils.cleanGooglePath;
@@ -16,18 +22,19 @@ public class GD2DriveItemUtils {
         return null;
     }
 
-    public static String getPath(GD2DriveItem root,GD2DriveItem children){
+    public static GD2Path getPath(GD2DriveItem root,GD2DriveItem children){
         GD2DriveItem tmp = children;
+        Path res = Paths.get("/");
         String result = new String();
         while(root!=tmp && tmp!=null){
             if(result.length()==0){
                 result = tmp.getName();
             }else {
-                result = tmp.getName() + "/"+ result;
+                result = tmp.getName() + PathUtils.SEPARATOR+ result;
             }
             tmp = tmp.getParent();
         }
-        return cleanGooglePath(result);
+        return GD2Path.get(result);
     }
 
     public static GD2DriveItem getRoot(GD2DriveItem item){
@@ -37,12 +44,11 @@ public class GD2DriveItemUtils {
         return item;
     }
 
-    public static GD2DriveItem findByPath(GD2DriveItem item,String path){
-        path = cleanGooglePath(path);
+    public static GD2DriveItem findByPath(GD2DriveItem item, GD2Path path){
+        //path = cleanGooglePath(path);
         GD2DriveItem root = getRoot(item);
-        if(path.length()==0) return root;
-        String[] explodedPath = path.split("/");
-        return findByPathInternal(root, explodedPath, 0);
+        if(path.isEmpty()) return root;
+        return findByPathInternal(root, path, 0);
     }
 
     public static void sortDriveItems(HashMap<String, GD2DriveItem> items, GD2DriveItem root) {
@@ -60,12 +66,12 @@ public class GD2DriveItemUtils {
 
     private static GD2DriveItem findByPathInternal(
             GD2DriveItem root,
-            String[] explodedPath,
+            GD2Path explodedPath,
             int index) {
         GD2DriveItem founded = null;
         for(GD2DriveItem child : root.children.values() ){
-            if(child.getName().equalsIgnoreCase(explodedPath[index])){
-                if(explodedPath.length==(index+1)) {
+            if(child.getName().equalsIgnoreCase(explodedPath.getNameLocal(index))){
+                if(explodedPath.getNameLocalCount()==(index+1)) {
                     return child;
                 }
                 founded = child;

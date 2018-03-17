@@ -1,24 +1,28 @@
 package org.enel;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.kendar.entities.GD2DriveItem;
+import org.kendar.entities.GD2DriveItemFactory;
 import org.kendar.entities.GD2DriveIterator;
 import org.kendar.utils.GD2Exception;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+@RunWith(JUnit4.class)
 public class DriveIteratorTest {
     @Test
     public void shouldDoStuffs() throws GD2Exception {
-        GD2DriveItem i0 = new GD2DriveItem("0",
-            new GD2DriveItem("01",
-                    new GD2DriveItem("011"),
-                    new GD2DriveItem("012")
+        GD2DriveItem i0 = GD2DriveItemFactory.createSimple("0","0",
+            GD2DriveItemFactory.createSimple("01","01",
+                    GD2DriveItemFactory.createSimple("011","011"),
+                    GD2DriveItemFactory.createSimple("012","012")
             ),
-            new GD2DriveItem("02",
-                    new GD2DriveItem("021"),
-                    new GD2DriveItem("022")
+            GD2DriveItemFactory.createSimple("02","02",
+                    GD2DriveItemFactory.createSimple("021","021"),
+                    GD2DriveItemFactory.createSimple("022","022")
             )
         );
 

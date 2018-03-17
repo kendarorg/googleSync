@@ -19,6 +19,13 @@ public class GD2DriveIterator {
     }
 
 
+    public List<GD2DriveItem> toList() throws GD2Exception {
+        List<GD2DriveItem> items = new ArrayList<>();
+        while(moveNext()){
+            items.add(getCurrent());
+        }
+        return items;
+    }
 
     public GD2DriveItem getCurrent(){
         return current;

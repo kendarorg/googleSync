@@ -2,6 +2,7 @@ package org.kendar;
 
 import org.kendar.entities.GD2DriveItem;
 import org.kendar.entities.GD2DriveStatus;
+import org.kendar.entities.GD2Path;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -12,7 +13,7 @@ public interface GD2Database {
 
     void saveDriveItems(List<GD2DriveItem> itemsToInsert);
 
-    GD2DriveStatus getDriveStatus(Path localPath);
+    GD2DriveStatus getDriveStatus(GD2Path localPath);
 
     void saveDriveStatus(GD2DriveStatus currentStatus);
 }

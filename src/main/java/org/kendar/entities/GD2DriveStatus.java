@@ -1,11 +1,12 @@
 package org.kendar.entities;
 
+import java.nio.file.Path;
 import java.time.Instant;
 
 public class GD2DriveStatus {
     //Local path
     private String id;
-    private String googlePath;
+    private GD2Path googlePath;
     private String lastGoogleToken;
     private Instant lastGoogleUpdate;
     private Instant lastLocalUpdate;
@@ -18,11 +19,11 @@ public class GD2DriveStatus {
         this.id = id;
     }
 
-    public String getGooglePath() {
+    public GD2Path getGooglePath() {
         return googlePath;
     }
 
-    public void setGooglePath(String googlePath) {
+    public void setGooglePath(GD2Path googlePath) {
         this.googlePath = googlePath;
     }
 

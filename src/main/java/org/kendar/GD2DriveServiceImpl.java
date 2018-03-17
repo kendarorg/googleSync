@@ -17,7 +17,7 @@ import static org.kendar.utils.TimeUtils.dtToInstant;
 
 @Named("gd2DriveService")
 public class GD2DriveServiceImpl implements GD2DriveService {
-    final static String DIR_MIME="application/vnd.google-apps.folder";
+    public final static String DIR_MIME="application/vnd.google-apps.folder";
     final static String DEFAULT_DRIVE_SPACE = "drive";
     final static String FULL_DIR_SEARCH_FIELDS =
             "nextPageToken, files(id, name, parents,modifiedTime,createdTime,trashed,size,md5checksum)";
@@ -55,6 +55,7 @@ public class GD2DriveServiceImpl implements GD2DriveService {
             GD2DriveItem root = new GD2DriveItem();
             root.setId(null);
             root.setName("");
+            root.setDir(true);
 
             HashMap<String, GD2DriveItem> items = new HashMap<>();
             List<GD2DriveItem> itemsToInsert = new ArrayList<>();
@@ -62,7 +63,7 @@ public class GD2DriveServiceImpl implements GD2DriveService {
             String nextPageToken = "";
             while (nextPageToken != null) {
                 final String npt = nextPageToken;
-                FileList result = connection.runGoogle("gd2DriveService-04",(s)->{
+                FileList result = connection.runGoogle("loadAllData-01",(s)->{
                     Drive.Files.List list = s.files().list();
                     if(npt.length()>0){
                         list = list.setPageToken(npt);
@@ -100,7 +101,7 @@ public class GD2DriveServiceImpl implements GD2DriveService {
         } catch (GD2Exception ex) {
             throw ex;
         } catch (Exception es) {
-            throw new GD2Exception("gd2DriveService-06", es);
+            throw new GD2Exception("loadAllData-02", es);
         }
     }
 

@@ -1,5 +1,6 @@
 package org.kendar;
 
+import org.enel.entities.FileSync;
 import org.kendar.entities.*;
 import org.kendar.utils.GD2Exception;
 import org.kendar.utils.ValueContainer;
@@ -85,8 +86,36 @@ public class GD2StatusServiceImpl implements GD2StatusService {
         GD2DriveIterator iterator = localRoot.iterator();
 
         while(iterator.moveNext()){
-            GD2DriveItem current = iterator.getCurrent();
-            //String path = getPath(googleRoot,current);
+            GD2DriveItem local = iterator.getCurrent();
+            GD2Path path = getPath(localRoot,local);
+            GD2DriveItem google = findByPath(googleRoot,path);
+
+
+            if(google.getModifiedTime().isAfter(local.getModifiedTime())){
+                if(google.isThrashed()) {
+                    result.add(new GD2DriveDelta(GD2DriveActionEnum.DELETE_FROM_LOCAL,
+                            local, google));
+                    continue;
+                }
+            }
+
+            if(!google.getMd5().equalsIgnoreCase(local.getMd5())){
+                result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_GOOGLE,
+                        local,google));
+            }
+
+            //}else
+                if(google.getModifiedTime().isAfter(local.getModifiedTime())){
+                if ( google.getSize() != local.getSize()) {
+                    result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_LOCAL,
+                            local,google));
+                }else if(!google.getMd5().equalsIgnoreCase(local.getMd5())){
+
+                }
+            }else{
+                result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_GOOGLE,
+                        local,google));
+            }
             throw new NotImplementedException();
            //Path localPath =
             /*if(current.isDir()){

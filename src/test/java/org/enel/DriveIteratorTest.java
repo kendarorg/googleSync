@@ -8,8 +8,8 @@ import org.kendar.entities.GD2DriveIterator;
 import org.kendar.utils.GD2Exception;
 import org.junit.Test;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.Assert.assertTrue;
+
 
 @RunWith(JUnit4.class)
 public class DriveIteratorTest {

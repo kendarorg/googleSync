@@ -35,6 +35,7 @@ public class GD2DriveItem {
     boolean local = false;
     long size =0;
     String md5 = "";
+    private boolean thrashed =false;
 
     public List<GD2DriveItem> getChildren(){
         return new ArrayList<GD2DriveItem>(children.values());
@@ -132,5 +133,13 @@ public class GD2DriveItem {
 
     public String getMd5() {
         return md5;
+    }
+
+    public boolean isThrashed() {
+        return thrashed;
+    }
+
+    public void setThrashed(boolean thrashed) {
+        this.thrashed = thrashed;
     }
 }

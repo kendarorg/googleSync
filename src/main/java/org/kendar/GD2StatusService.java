@@ -16,4 +16,6 @@ public interface GD2StatusService {
     List<GD2DriveDelta> loadDifferences() throws GD2Exception;
 
     GD2DriveStatus loadDriveStatus(GD2Path googlePath,GD2Path localPath);
+
+    void saveDriveStatus(GD2DriveStatus status);
 }

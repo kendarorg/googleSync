@@ -47,8 +47,8 @@ public class GD2DriveItemUtils {
     public static GD2DriveItem findByPath(GD2DriveItem item, GD2Path path){
         //path = cleanGooglePath(path);
         GD2DriveItem root = getRoot(item);
-        if(path.isEmpty()) return root;
-        return findByPathInternal(root, path, 0);
+        if(path.isEmpty()) return item;
+        return findByPathInternal(item, path, 0);
     }
 
     public static void sortDriveItems(HashMap<String, GD2DriveItem> items, GD2DriveItem root) {

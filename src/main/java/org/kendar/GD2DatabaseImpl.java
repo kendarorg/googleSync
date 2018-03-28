@@ -21,21 +21,21 @@ public class GD2DatabaseImpl implements GD2Database{
 
     @Override
     public void saveDriveItem(GD2DriveItem item) {
-        throw new NotImplementedException();
+
     }
 
     @Override
     public void saveDriveItems(List<GD2DriveItem> itemsToInsert) {
-
+        itemsToInsert.clear();
     }
 
     @Override
     public GD2DriveStatus getDriveStatus(GD2Path localPath) {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public void saveDriveStatus(GD2DriveStatus currentStatus) {
-
+        throw new NotImplementedException();
     }
 }

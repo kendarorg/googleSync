@@ -35,6 +35,7 @@ public class GD2ConnectionImpl implements GD2Connection {
     private List<GD2LocalTask> tasks = new ArrayList<>();
     private final ConcurrentLinkedQueue<GD2Runner> tasksToRun = new ConcurrentLinkedQueue<>();
 
+
     public GD2ConnectionImpl(GD2Settings settings){
         this.settings = settings;
         this.googleApiRateLimiter = RateLimiter.create(GOOGLE_RATE_LIMIT);
@@ -46,19 +47,17 @@ public class GD2ConnectionImpl implements GD2Connection {
     }
 
     public boolean areJobsRunning(){
+        if(!tasksToRun.isEmpty())return true;
         for(GD2LocalTask tk:tasks){
             if(tk.isRunning())return true;
         }
-        return false;
+
+        return !tasksToRun.isEmpty();
     }
 
     public void waitForJobs() {
         while(areJobsRunning()){
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread.yield();
         }
     }
 

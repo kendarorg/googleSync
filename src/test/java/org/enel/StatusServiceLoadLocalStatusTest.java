@@ -11,6 +11,7 @@ import org.kendar.entities.GD2DriveStatus;
 import org.kendar.entities.GD2Path;
 import org.kendar.utils.GD2Consumer;
 import org.kendar.utils.GD2Exception;
+import org.kendar.utils.GD2Md5Calculator;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
@@ -34,6 +35,7 @@ public class StatusServiceLoadLocalStatusTest {
     GD2Database db;
     private GD2StatusServiceImpl target;
     private GD2LocalService localService;
+    private GD2Md5Calculator md5calculator;
 
     @Before
     public void doSetup(){
@@ -41,8 +43,9 @@ public class StatusServiceLoadLocalStatusTest {
         driveService = mock(GD2DriveService.class);
         localService = mock(GD2LocalService.class);
         settings = mock(GD2Settings.class);
+        md5calculator = mock(GD2Md5Calculator.class);
         db = mock(GD2Database.class);
-        target = new GD2StatusServiceImpl(driveService,settings,db,localService);
+        target = new GD2StatusServiceImpl(driveService,settings,db,localService,md5calculator);
     }
 
 

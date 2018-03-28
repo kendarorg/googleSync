@@ -10,6 +10,7 @@ import org.kendar.entities.GD2DriveStatus;
 import org.kendar.entities.GD2Path;
 import org.junit.Test;
 import org.kendar.utils.GD2Exception;
+import org.kendar.utils.GD2Md5Calculator;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -24,6 +25,7 @@ public class StatusServiceTest {
     GD2Database db;
     private GD2StatusServiceImpl target;
     private GD2LocalService localService;
+    private GD2Md5Calculator md5calculator;
 
     @Before
     public void doSetup(){
@@ -32,7 +34,8 @@ public class StatusServiceTest {
         settings = mock(GD2Settings.class);
         db = mock(GD2Database.class);
         localService = mock(GD2LocalService.class);
-        target = new GD2StatusServiceImpl(driveService,settings,db,localService);
+        md5calculator = mock(GD2Md5Calculator.class);
+        target = new GD2StatusServiceImpl(driveService,settings,db,localService,md5calculator);
     }
     @Test
     public void shouldCreateStatus(){

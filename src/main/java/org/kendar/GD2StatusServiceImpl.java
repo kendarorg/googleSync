@@ -1,8 +1,9 @@
 package org.kendar;
 
-import org.enel.entities.FileSync;
+import com.google.common.hash.Hashing;
 import org.kendar.entities.*;
 import org.kendar.utils.GD2Exception;
+import org.kendar.utils.GD2Md5Calculator;
 import org.kendar.utils.ValueContainer;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -11,7 +12,6 @@ import javax.inject.Named;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,18 +27,20 @@ public class GD2StatusServiceImpl implements GD2StatusService {
     private GD2Settings settings;
     private GD2Database db;
     private GD2LocalService localService;
+    private GD2Md5Calculator md5Calculator;
     private GD2DriveItem googleRoot;
     private GD2DriveItem localRoot;
 
     @Inject
     public GD2StatusServiceImpl(
             GD2DriveService driveService,GD2Settings settings,GD2Database db,
-            GD2LocalService localService){
+            GD2LocalService localService,GD2Md5Calculator md5Calculator){
 
         this.driveService = driveService;
         this.settings = settings;
         this.db = db;
         this.localService = localService;
+        this.md5Calculator = md5Calculator;
     }
     @Override
     public void loadGoogleStatus(GD2Path gPath, GD2DriveStatus status) throws GD2Exception {
@@ -89,45 +91,61 @@ public class GD2StatusServiceImpl implements GD2StatusService {
             GD2DriveItem local = iterator.getCurrent();
             GD2Path path = getPath(localRoot,local);
             GD2DriveItem google = findByPath(googleRoot,path);
+            if(google==null){
+                result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_GOOGLE,
+                        local,google));
+                continue;
+            }
 
-
-            if(google.getModifiedTime().isAfter(local.getModifiedTime())){
-                if(google.isThrashed()) {
-                    result.add(new GD2DriveDelta(GD2DriveActionEnum.DELETE_FROM_LOCAL,
+            if(google.getSize()!=local.getSize()){
+                if(google.getModifiedTime().isAfter(local.getModifiedTime())){
+                    md5Calculator.setupLocalMd5(local);
+                    if(google.getMd5().equalsIgnoreCase(local.getMd5())){
+                        continue;
+                    }
+                    result.add(new GD2DriveDelta(GD2DriveActionEnum.UPDATE_FROM_GOOGLE,
                             local, google));
+
+                    continue;
+                }else if(local.getModifiedTime().isAfter(google.getModifiedTime())){
+                    md5Calculator.setupLocalMd5(local);
+                    if(google.getMd5().equalsIgnoreCase(local.getMd5())){
+                        continue;
+                    }
+                    result.add(new GD2DriveDelta(GD2DriveActionEnum.UPDATE_FROM_LOCAL,
+                            local, google));
+
+                    continue;
+                }else{
                     continue;
                 }
             }
 
-            if(!google.getMd5().equalsIgnoreCase(local.getMd5())){
-                result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_GOOGLE,
-                        local,google));
+            md5Calculator.setupLocalMd5(local);
+            if(google.getMd5().equalsIgnoreCase(local.getMd5())){
+                continue;
             }
 
-            //}else
-                if(google.getModifiedTime().isAfter(local.getModifiedTime())){
-                if ( google.getSize() != local.getSize()) {
-                    result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_LOCAL,
-                            local,google));
-                }else if(!google.getMd5().equalsIgnoreCase(local.getMd5())){
+            if(google.getModifiedTime().isAfter(local.getModifiedTime())){
 
-                }
+                result.add(new GD2DriveDelta(GD2DriveActionEnum.UPDATE_FROM_GOOGLE,
+                        local, google));
+
+                continue;
+            }else if(local.getModifiedTime().isAfter(google.getModifiedTime())){
+                result.add(new GD2DriveDelta(GD2DriveActionEnum.UPDATE_FROM_LOCAL,
+                        local, google));
+
+                continue;
             }else{
-                result.add(new GD2DriveDelta(GD2DriveActionEnum.ADD_TO_GOOGLE,
-                        local,google));
+                continue;
             }
-            throw new NotImplementedException();
-           //Path localPath =
-            /*if(current.isDir()){
-
-            }*/
-
         }
-
-        //First folder present on drive not present locally
-
-        throw new NotImplementedException();
+        return result;
     }
+
+
+
 
     @Override
     public GD2DriveStatus loadDriveStatus(GD2Path googlePath,GD2Path localPath) {
@@ -139,6 +157,11 @@ public class GD2StatusServiceImpl implements GD2StatusService {
             db.saveDriveStatus(currentStatus);
         }
         return currentStatus;
+    }
+
+    @Override
+    public void saveDriveStatus(GD2DriveStatus status) {
+        throw new NotImplementedException();
     }
 
 

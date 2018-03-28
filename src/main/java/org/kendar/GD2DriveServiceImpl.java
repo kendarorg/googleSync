@@ -1,14 +1,23 @@
 package org.kendar;
 
+import com.google.api.client.http.FileContent;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import org.kendar.entities.GD2DriveItem;
+import org.kendar.entities.GD2DriveItemUtils;
 import org.kendar.utils.GD2Exception;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.net.URLConnection;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,6 +112,52 @@ public class GD2DriveServiceImpl implements GD2DriveService {
         } catch (Exception es) {
             throw new GD2Exception("loadAllData-02", es);
         }
+    }
+
+    @Override
+    public void addToGoogle(GD2DriveItem local, GD2DriveItem google) {
+
+    }
+
+    @Override
+    public void readFromGoogle(GD2DriveItem local, GD2DriveItem google) throws GD2Exception {
+        java.io.File file = new  java.io.File(GD2DriveItemUtils.getPath(null,local).toString());
+        connection.run(()-> {
+            connection.runGoogle("readFromGoogle-01", (c) -> {
+                FileOutputStream fop = new FileOutputStream(file);
+                c.files().get(google.getId())
+                        .executeMediaAndDownloadTo(fop);
+                return null;
+            });
+        });
+    }
+
+    @Override
+    public void updateOnGoogle(GD2DriveItem local, GD2DriveItem google) {
+        Path path = GD2DriveItemUtils.getPath(null,local).toPath();
+        java.io.File filePath = new java.io.File(path.toString());
+        String mime = URLConnection.guessContentTypeFromName(filePath.getName());
+
+        File fileMetadata = new File();
+        fileMetadata.setName(path.getFileName().toString());
+        fileMetadata.setId(google.getId());
+        fileMetadata.setCreatedTime(new DateTime(local.getCreatedTime().toEpochMilli()));
+        fileMetadata.setModifiedTime(new DateTime(local.getModifiedTime().toEpochMilli()));
+        fileMetadata.setParents(Arrays.asList(google.getParentId()));
+        fileMetadata.setMimeType(mime);
+
+
+        connection.run(()-> {
+            connection.runGoogle("updateOnGoogle-01", (c) -> {
+                FileContent mediaContent = new FileContent(mime, filePath);
+                File file = c.files().create(fileMetadata, mediaContent)
+                        .setFields("id")
+                        .execute();
+                System.out.println("File ID: " + file.getId());
+
+                return null;
+            });
+        });
     }
 
 }

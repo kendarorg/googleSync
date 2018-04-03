@@ -16,6 +16,7 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.utils.PoiService;
 
 import java.util.List;
 
@@ -51,13 +52,15 @@ public class StatusServiceLoadLocalStatusTest {
 
     @Test
     public void shouldLoadLocalStatusEMPTY() throws Exception {
+
         GD2Path local = GD2Path.get("C:\\localDrive","");
 
-        GD2DriveItem root = GD2DriveItemFactory.createSimple("localDrive","C:\\localDrive",
+        GD2DriveItem root =PoiService.loadFile("StatusServiceLoadLocalStatus/shouldLoadLocalStatusEMPTY.xlsx",true);
+        /*GD2DriveItem root = GD2DriveItemFactory.createSimple("localDrive","C:\\localDrive",
                 GD2DriveItemFactory.createSimple("file.txt","C:\\localDrive\\file.txt"),
                 GD2DriveItemFactory.createSimple("dir","C:\\localDrive\\dir",
                         GD2DriveItemFactory.createSimple("dirfile.txt","C:\\localDrive\\dir\\dirfile.txt")));
-        root.setDir(true);
+        root.setDir(true);*/
 
         List<GD2DriveItem> listOfFiles = root.iterator().toList();
         mockLoadLocalFiles(listOfFiles);
@@ -90,11 +93,7 @@ public class StatusServiceLoadLocalStatusTest {
     public void shouldLoadLocalStatusSL() throws Exception {
         GD2Path local = GD2Path.get("C:\\localDrive\\","");
 
-        GD2DriveItem root = GD2DriveItemFactory.createSimple("localDrive","C:\\localDrive",
-                GD2DriveItemFactory.createSimple("file.txt","C:\\localDrive\\file.txt"),
-                GD2DriveItemFactory.createSimple("dir","C:\\localDrive\\dir",
-                        GD2DriveItemFactory.createSimple("dirfile.txt","C:\\localDrive\\dir\\dirfile.txt")));
-        root.setDir(true);
+        GD2DriveItem root =PoiService.loadFile("StatusServiceLoadLocalStatus/shouldLoadLocalStatusEMPTY.xlsx",true);
 
         List<GD2DriveItem> listOfFiles = root.iterator().toList();
         mockLoadLocalFiles(listOfFiles);

@@ -11,6 +11,7 @@ import org.kendar.entities.GD2DriveStatus;
 import org.kendar.entities.GD2Path;
 import org.kendar.utils.GD2Exception;
 import org.kendar.utils.GD2Md5Calculator;
+import org.utils.PoiService;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -44,12 +45,14 @@ public class StatusServiceLoadGoogleStatusTest {
         GD2Path google = GD2Path.get("");
         GD2Path local = GD2Path.get("C:\\localDrive");
 
-        GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
+        GD2DriveItem root = PoiService.loadFile("StatusServiceLoadGoogleStatus/shouldLoadGoogleStatusEMPTY.xlsx",true);
+
+        /*GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
                 GD2DriveItemFactory.createSimple("file.txt",null),
                 GD2DriveItemFactory.createSimple("dir",null,
                         GD2DriveItemFactory.createSimple("dirfile.txt",null)));
         root.setId(null);
-        root.setDir(true);
+        root.setDir(true);*/
 
 
         when(driveService.loadAllData()).
@@ -72,12 +75,13 @@ public class StatusServiceLoadGoogleStatusTest {
         GD2Path google = GD2Path.get("/");
         GD2Path local = GD2Path.get("C:\\localDrive");
 
-        GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
+        /*GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
                 GD2DriveItemFactory.createSimple("file.txt",null),
                 GD2DriveItemFactory.createSimple("dir",null,
                         GD2DriveItemFactory.createSimple("dirfile.txt",null)));
         root.setId(null);
-        root.setDir(true);
+        root.setDir(true);*/
+        GD2DriveItem root = PoiService.loadFile("StatusServiceLoadGoogleStatus/shouldLoadGoogleStatusEMPTY.xlsx",true);
 
 
         when(driveService.loadAllData()).
@@ -101,12 +105,13 @@ public class StatusServiceLoadGoogleStatusTest {
         GD2Path google = GD2Path.get("/dir");
         GD2Path local = GD2Path.get("C:\\localDrive");
 
-        GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
+        /*GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
                 GD2DriveItemFactory.createSimple("file.txt",null),
                 GD2DriveItemFactory.createSimple("dir",null,
                         GD2DriveItemFactory.createSimple("dirfile.txt",null)));
         root.setId(null);
-        root.setDir(true);
+        root.setDir(true);*/
+        GD2DriveItem root = PoiService.loadFile("StatusServiceLoadGoogleStatus/shouldLoadGoogleStatusEMPTY.xlsx",true);
 
 
         when(driveService.loadAllData()).
@@ -130,12 +135,13 @@ public class StatusServiceLoadGoogleStatusTest {
         GD2Path google = GD2Path.get("/dir/");
         GD2Path local = GD2Path.get("C:\\localDrive");
 
-        GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
+        /*GD2DriveItem root = GD2DriveItemFactory.createSimple("",null,
                 GD2DriveItemFactory.createSimple("file.txt",null),
                 GD2DriveItemFactory.createSimple("dir",null,
                         GD2DriveItemFactory.createSimple("dirfile.txt",null)));
         root.setId(null);
-        root.setDir(true);
+        root.setDir(true);*/
+        GD2DriveItem root = PoiService.loadFile("StatusServiceLoadGoogleStatus/shouldLoadGoogleStatusEMPTY.xlsx",true);
 
 
         when(driveService.loadAllData()).
